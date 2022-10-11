@@ -1,0 +1,14 @@
+@token = BQDkkTsdsQwlHhjWtWzRNzmopJ1TOKJrW8dgkVB1oyYJIXMCl3rtCmiaoW-TxBWiA_AJFy3eByr-F-XNmcAE6a_-9PItJ8Rx9h2vPYIMuQ6sBkh5SoU
+
+###
+
+POST https://accounts.spotify.com/api/token HTTP/1.1
+Authorization: Basic Zjg0MjNlOTFhY2QxNGEzNTgwNzQ5ZjBhNjAzNmNlOTk6M2NkZDZlYTdmMjFkNGYwZGFiODI2YmJjMmQ2Zjg0NWE=
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=client_credentials
+
+###
+
+GET https://api.spotify.com/v1/albums/2up3OPMp9Tb4dAKM2erWXQ
+Authorization: Bearer {{token}}
