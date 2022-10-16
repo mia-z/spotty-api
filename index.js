@@ -1,5 +1,3 @@
-import { AuthClient } from "./src/SpottyApi";
+import { SpotifyClient } from "./src/Client";
 
-export { 
-    AuthClient 
-};
+export { SpotifyClient };

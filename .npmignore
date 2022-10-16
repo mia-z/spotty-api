@@ -1,1 +1,5 @@
-src
+*.http
+.vscode
+node_modules
+.yarn
+.yarnrc.yml
