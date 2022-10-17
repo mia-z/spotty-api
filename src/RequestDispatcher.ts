@@ -1,5 +1,5 @@
+import axios, { AxiosInstance } from "axios";
 import { ErrorResponse, AcceptedMethods } from "index";
-import { RequestConfig } from "./RequestConfig"; 
 import camel from "camelcase-keys";
 
 export class RequestDispatcher {
@@ -7,6 +7,8 @@ export class RequestDispatcher {
     //tokenEndpoint: string | null;
     refreshEndpoint: string | null = null;
     refreshToken: string | null = null;
+
+    private instance: AxiosInstance;
 
     constructor(token: string, refreshToken?: string, refreshEndpoint?: string) {
         if (!token) {
@@ -26,10 +28,21 @@ export class RequestDispatcher {
         }
 
         this.token = token;
+        this.instance = axios.create({
+            baseURL: "https://api.spotify.com/v1",
+            headers: {
+                "Authorization": `Bearer ${this.token}`
+            }
+        });
     }
 
     async setToken(token: string) {
         this.token = token;
+        this.instance = axios.create({
+            headers: {
+                "Authorization": `Bearer ${this.token}`
+            }
+        });
     }
 
     async setRefreshToken(refreshToken: string) {
@@ -58,26 +71,17 @@ export class RequestDispatcher {
         try {
             switch (method) {
                 case "POST":
-                case "PUT": {
-                    if (body !== undefined) {
-                        const reqConfig = RequestConfig(this.token, method, JSON.stringify(body))
-                        const res = await fetch(`https://api.spotify.com/v1${uri}`, reqConfig);
-                        const parsed = camel(await res.json()) as T;
-                        return parsed;
-                    } else {
-                        const reqConfig = RequestConfig(this.token, method);
-                        const res = await fetch(`https://api.spotify.com/v1${uri}`, reqConfig);
-                        const parsed = camel(await res.json()) as T;
-                        return parsed;
-                    }
-                }
+                    const post = await this.instance.post<T>(`https://api.spotify.com/v1${uri}`, JSON.stringify(body));
+                    return post.data;
+                case "PUT": 
+                    const put = await this.instance.put<T>(`https://api.spotify.com/v1${uri}`, JSON.stringify(body));
+                    return put.data;
                 case "GET":
-                case "DELETE": {
-                    const reqConfig = RequestConfig(this.token, method);
-                    const res = await fetch(`https://api.spotify.com/v1${uri}`, reqConfig);
-                    const parsed = camel(await res.json()) as T;
-                    return parsed;
-                }
+                    const get = await this.instance.get<T>(`https://api.spotify.com/v1${uri}`);
+                    return get.data;
+                case "DELETE": 
+                    const del = await this.instance.delete<T>(`https://api.spotify.com/v1${uri}`);
+                    return del.data;
             }
         } catch (e) {
             return {
