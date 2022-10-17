@@ -1,5 +1,11 @@
-export class SpotifyClient {
+export declare class SpotifyClient {
     public constructor(token: string, refreshToken?: string, refreshEndpoint?: string);
+
+    setToken: (token: string) => void;
+    setRefreshToken: (refreshToken: string) => void;
+    getNewToken: () => Promise<void>;
+
+    private dispatchRequest;
 
     albums: IAlbumEndpoints;
     artists: IArtistEndpoints;
@@ -7,94 +13,87 @@ export class SpotifyClient {
     playlists: IPlaylistEndpoints;
     users: IUserEndpoints;
     player: IDeviceEndpoints;
+    
 }
 
 export interface IAlbumEndpoints {
-    getAlbum(id: string): SpotifyResponse<Album>,
-    getAlbums (ids: Array<string>): SpotifyResponse<Array<Album>>,
-    getAlbumTracks (id: string):SpotifyResponse<ResultSet<Track>>,
-    getMySavedAlbums(): SpotifyResponse<ResultSet<Album>>
-    saveAlbumForUser(id: string): SpotifyResponse<SaveResponse>,
-    saveAlbumsForUser(ids: Array<string>): SpotifyResponse<SaveResponse>,
-    removeAlbumForUser(id: string): SpotifyResponse<DeleteResponse>,
-    removeAlbumsForUser(ids: Array<string>): SpotifyResponse<DeleteResponse>,
-    albumIsSaved(ids: Array<string>): SpotifyResponse<CheckResponse>,
-    getNewReleases(): SpotifyResponse<ResultSet<Album>>
+    getAlbum(id: string): SpotifyResponse<Album>; 
+    getAlbums (ids: Array<string>): SpotifyResponse<Array<Album>>;
+    getAlbumTracks (id: string):SpotifyResponse<ResultSet<Track>>;
+    getMySavedAlbums(): SpotifyResponse<ResultSet<Album>>;
+    saveAlbumForUser(id: string): SpotifyResponse<SaveResponse>;
+    saveAlbumsForUser(ids: Array<string>): SpotifyResponse<SaveResponse>;
+    removeAlbumForUser(id: string): SpotifyResponse<DeleteResponse>;
+    removeAlbumsForUser(ids: Array<string>): SpotifyResponse<DeleteResponse>;
+    albumIsSaved(ids: Array<string>): SpotifyResponse<CheckResponse>;
+    getNewReleases(): SpotifyResponse<ResultSet<Album>>;
 }
 
 export interface IArtistEndpoints {
-    getArtist(id: string): SpotifyResponse<Artist>,
-    getArtists(ids: Array<string>): SpotifyResponse<Array<Artist>>,
-    getArtistAlbums(id: string): SpotifyResponse<ResultSet<Album>>,
-    getArtistTopTracks(id: string): SpotifyResponse<Track>,
-    getArtistsRelatedArtists(id: string): SpotifyResponse<Array<Artist>>
+    getArtist(id: string): SpotifyResponse<Artist>;
+    getArtists(ids: Array<string>): SpotifyResponse<Array<Artist>>;
+    getArtistAlbums(id: string): SpotifyResponse<ResultSet<Album>>;
+    getArtistTopTracks(id: string): SpotifyResponse<Track>;
+    getArtistsRelatedArtists(id: string): SpotifyResponse<Array<Artist>>;
 }
 
 export interface ITrackEndpoints {
-    getTrack(id: string): SpotifyResponse<Track>,
-    getTracks(ids: Array<string>): SpotifyResponse<Array<Track>>,
-    getMySavedTracks(): SpotifyResponse<ResultSet<Track>>,
-    saveTrackForUser(id: Array<string>): SpotifyResponse<SaveResponse>,
-    removeTracksForUser(ids: Array<string>): SpotifyResponse<DeleteResponse>,
-    trackIsSaved(ids: Array<string>): SpotifyResponse<CheckResponse>,
+    getTrack(id: string): SpotifyResponse<Track>;
+    getTracks(ids: Array<string>): SpotifyResponse<Array<Track>>;
+    getMySavedTracks(): SpotifyResponse<ResultSet<Track>>;
+    saveTrackForUser(id: Array<string>): SpotifyResponse<SaveResponse>;
+    removeTracksForUser(ids: Array<string>): SpotifyResponse<DeleteResponse>;
+    trackIsSaved(ids: Array<string>): SpotifyResponse<CheckResponse>;
 }
 
 export interface IUserEndpoints {
-    getCurrentUser(): SpotifyResponse<User>,
-    getCurrentUsersTopTracks(): SpotifyResponse<ResultSet<Track>>,
-    getCurrentUsersTopAlbums(): SpotifyResponse<ResultSet<Album>>,
-    getUserProfile(id: string): SpotifyResponse<User>,
-    getCurrentUserFollowedArtists(): SpotifyResponse<ResultSet<Artist>>,
-    followArtist(ids: Array<string>): SpotifyResponse<FollowResponse>,
-    unfollowArtist(ids: Array<string>): SpotifyResponse<FollowResponse>,
-    followUser(ids: Array<string>): SpotifyResponse<FollowResponse>,
-    unfollowUser(ids: Array<string>): SpotifyResponse<FollowResponse>,
-    checkIfCurrentUserFollowsArtist(ids: Array<string>):SpotifyResponse<CheckResponse>,
-    checkIfCurrentUserFollowsUser(ids: Array<string>):SpotifyResponse<CheckResponse>,
+    getCurrentUser(): SpotifyResponse<User>;
+    getCurrentUsersTopTracks(): SpotifyResponse<ResultSet<Track>>;
+    getCurrentUsersTopAlbums(): SpotifyResponse<ResultSet<Album>>;
+    getUserProfile(id: string): SpotifyResponse<User>;
+    getCurrentUserFollowedArtists(): SpotifyResponse<ResultSet<Artist>>;
+    followArtist(ids: Array<string>): SpotifyResponse<FollowResponse>;
+    unfollowArtist(ids: Array<string>): SpotifyResponse<FollowResponse>;
+    followUser(ids: Array<string>): SpotifyResponse<FollowResponse>;
+    unfollowUser(ids: Array<string>): SpotifyResponse<FollowResponse>;
+    checkIfCurrentUserFollowsArtist(ids: Array<string>):SpotifyResponse<CheckResponse>;
+    checkIfCurrentUserFollowsUser(ids: Array<string>):SpotifyResponse<CheckResponse>;
 }
 
 export interface IPlaylistEndpoints {
-    getPlaylist(id: string): SpotifyResponse<Playlist>,
-    updatePlaylistDetails(id: string, UpdatedPlaylistDetails: Pick<Playlist, "name" | "public" | "collaborative" | "description">): SpotifyResponse<Playlist>,
-    getPlaylistTracks(id: string): SpotifyResponse<ResultSet<Track>>,
-    addTrackToPlaylist(id: string, Trackids: Array<string>): SpotifyResponse<SnapshotResponse>,
-    removeTrackFromPlaylist(id: string, Trackids: { "tracks": Array<Pick<Track, "uri">> }): SpotifyResponse<SnapshotResponse>,
-    getCurrentUserPlaylists(): SpotifyResponse<ResultSet<Playlist>>,
-    getUsersPlaylists(id: string): SpotifyResponse<ResultSet<Playlist>>,
-    createPlaylist(id: string, NewPlaylist: Pick<Playlist, "name" | "public" | "collaborative" | "description">): SpotifyResponse<Playlist>,
-    getFeaturedPlaylists(): SpotifyResponse<FeaturedPlaylistsResponse<Album>>,
-    getCategorysPlaylists(id: string): SpotifyResponse<FeaturedPlaylistsResponse<Playlist>>,
-    getPlaylistImage(id: string): SpotifyResponse<Array<Image>>,
-    addPlaylistCoverImage(id: string, CustomImage: string): SpotifyResponse<string>,
-    checkIfUsersFollowPlaylist(id: string, ids: Array<string>): SpotifyResponse<CheckResponse>
-}
-
-// interface ICategoryEndpoints {
-//     GetBrowseCategories()
-// }
-
-export interface IGenreEndpoints {
-    getGenres(): SpotifyResponse<string>
+    getPlaylist(id: string): SpotifyResponse<Playlist>;
+    updatePlaylistDetails(id: string, UpdatedPlaylistDetails: Pick<Playlist, "name" | "public" | "collaborative" | "description">): SpotifyResponse<Playlist>;
+    getPlaylistTracks(id: string): SpotifyResponse<ResultSet<Track>>;
+    addTrackToPlaylist(id: string, Trackids: Array<string>): SpotifyResponse<SnapshotResponse>;
+    removeTrackFromPlaylist(id: string, Trackids: { "tracks": Array<Pick<Track, "uri">> }): SpotifyResponse<SnapshotResponse>;
+    getCurrentUserPlaylists(): SpotifyResponse<ResultSet<Playlist>>;
+    getUsersPlaylists(id: string): SpotifyResponse<ResultSet<Playlist>>;
+    createPlaylist(id: string, NewPlaylist: Pick<Playlist, "name" | "public" | "collaborative" | "description">): SpotifyResponse<Playlist>;
+    getFeaturedPlaylists(): SpotifyResponse<FeaturedPlaylistsResponse<Album>>;
+    getCategorysPlaylists(id: string): SpotifyResponse<FeaturedPlaylistsResponse<Playlist>>;
+    getPlaylistImage(id: string): SpotifyResponse<Array<Image>>;
+    addPlaylistCoverImage(id: string, CustomImage: string): SpotifyResponse<string>;
+    checkIfUsersFollowPlaylist(id: string, ids: Array<string>): SpotifyResponse<CheckResponse>;
 }
 
 export interface IDeviceEndpoints {
-    getPlaybackState(): SpotifyResponse<SpotifyDevice>,
-    transferPlayback(deviceIds: Array<string>): SpotifyResponse<string>,
-    getAvailableDevices(): SpotifyResponse<Array<SpotifyDevice>>,
-    getCurrentlyPlayingTrack(): SpotifyResponse<SpotifyPlayer>,
-    startPlayback(deviceId: string): SpotifyResponse<string>,
-    pausePlayback(deviceId: string): SpotifyResponse<string>,
-    skipToNext(deviceId: string): SpotifyResponse<string>,
-    skipToPrevious(deviceId: string): SpotifyResponse<string>,
-    seekToPosition(Position: number): SpotifyResponse<string>,
-    setRepeatTrack(): SpotifyResponse<string>,
-    setRepeatContext(): SpotifyResponse<string>,
-    setRepeatOff(): SpotifyResponse<string>,
-    setPlaybackVolume(volumePercent: number): SpotifyResponse<string>,
-    setShuffle(shuffleState: boolean): SpotifyResponse<string>,
-    getRecentlyPlayed(): SpotifyResponse<ResultSet<Track>>,
-    getPlaybackQueue(): SpotifyResponse<UserPlaybackQueueResponse>,
-    addItemToQueue(id: string): SpotifyResponse<string>
+    getPlaybackState(): SpotifyResponse<SpotifyDevice>;
+    transferPlayback(deviceIds: Array<string>): SpotifyResponse<string>;
+    getAvailableDevices(): SpotifyResponse<Array<SpotifyDevice>>;
+    getCurrentlyPlayingTrack(): SpotifyResponse<SpotifyPlayer>;
+    startPlayback(deviceId: string): SpotifyResponse<string>;
+    pausePlayback(deviceId: string): SpotifyResponse<string>;
+    skipToNext(deviceId: string): SpotifyResponse<string>;
+    skipToPrevious(deviceId: string): SpotifyResponse<string>;
+    seekToPosition(Position: number): SpotifyResponse<string>;
+    setRepeatTrack(): SpotifyResponse<string>;
+    setRepeatContext(): SpotifyResponse<string>;
+    setRepeatOff(): SpotifyResponse<string>;
+    setPlaybackVolume(volumePercent: number): SpotifyResponse<string>;
+    setShuffle(shuffleState: boolean): SpotifyResponse<string>;
+    getRecentlyPlayed(): SpotifyResponse<ResultSet<Track>>;
+    getPlaybackQueue(): SpotifyResponse<UserPlaybackQueueResponse>;
+    addItemToQueue(id: string): SpotifyResponse<string>;
 }
 
 export type AcceptedMethods = "GET" | "POST" | "PUT" | "DELETE";
@@ -314,7 +313,7 @@ export type SpotifyContext = {
     uri: string
 }
 
-export class RequestDispatcher {
+export declare class RequestDispatcher {
     public constructor(token: string, refreshToken?: string, refreshEndpoint?: string);
     
     dispatch<T>(method: AcceptedMethods, uri: string, body?: any): Promise<T | ErrorResponse>;
