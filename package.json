@@ -1,6 +1,6 @@
 {
   "name": "spotty-api",
-  "version": "0.0.90-test",
+  "version": "0.0.92-test",
   "description": "API for interfacing with the Spotify REST API using Axios",
   "main": "index.js",
   "type": "module",

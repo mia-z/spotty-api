@@ -7,7 +7,7 @@ export function RequestConfig(token: string, method: AcceptedMethods, body?: Bod
         return {
             method: method,
             headers: new Headers({
-                "Authorization": token,
+                "Authorization": "Bearer " + token,
             }),
             body: body
         }
@@ -15,7 +15,7 @@ export function RequestConfig(token: string, method: AcceptedMethods, body?: Bod
         return {
         method: method,
             headers: new Headers({
-                "Authorization": token,
+                "Authorization": "Bearer " + token,
             })
     }
 }
