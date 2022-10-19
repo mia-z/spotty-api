@@ -1,11 +1,29 @@
+export declare class RequestDispatcher {
+    public constructor(token: string, refreshToken?: string, refreshEndpoint?: string);
+    
+    token: string;
+    refreshToken: string | null;
+    refreshEndpoint: string | null;
+
+    dispatch<T>(method: AcceptedMethods, uri: string, body?: any): Promise<T | ErrorResponse>;
+    setToken(token: string): void;
+    setRefreshToken(refreshToken: string): void;
+    getNewToken(): Promise<void>;
+}
+
+export declare function RequestConfig(token: string, method: AcceptedMethods): RequestInit;
+export declare function RequestConfig(token: string, method: AcceptedMethods, body: BodyInit): RequestInit;
+
 export declare class SpotifyClient {
     public constructor(token: string, refreshToken?: string, refreshEndpoint?: string);
 
     setToken: (token: string) => void;
-    setRefreshToken: (refreshToken: string) => void;
     getNewToken: () => Promise<void>;
 
+    private dispatcher: RequestDispatcher;
     private dispatchRequest;
+
+    token: string;
 
     albums: IAlbumEndpoints;
     artists: IArtistEndpoints;
@@ -312,15 +330,3 @@ export type SpotifyContext = {
     externalUrls: ExternalUrl,
     uri: string
 }
-
-export declare class RequestDispatcher {
-    public constructor(token: string, refreshToken?: string, refreshEndpoint?: string);
-    
-    dispatch<T>(method: AcceptedMethods, uri: string, body?: any): Promise<T | ErrorResponse>;
-    setToken(token: string): void;
-    setRefreshToken(refreshToken: string): void;
-    getNewToken(): Promise<void>;
-}
-
-export declare function RequestConfig(token: string, method: AcceptedMethods): RequestInit;
-export declare function RequestConfig(token: string, method: AcceptedMethods, body: BodyInit): RequestInit;

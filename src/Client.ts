@@ -29,19 +29,23 @@ const BASE_URL = "https://api.spotify.com/v1";
 
 export class SpotifyClient {
     private dispatcher: RequestDispatcher;
-    
-    setToken: (token: string) => void;
-    setRefreshToken: (refreshToken: string) => void;
-    getNewToken: () => Promise<void>;
-
     private dispatchRequest;
 
     constructor(token: string, refreshToken?: string, refreshEndpoint?: string) {
         this.dispatcher = new RequestDispatcher(token, refreshToken, refreshEndpoint);
         this.dispatchRequest = this.dispatcher.dispatch;
-        this.setToken = this.dispatcher.setToken;
-        this.setRefreshToken = this.dispatcher.setRefreshToken;
-        this.getNewToken = this.dispatcher.getNewToken;
+    }
+
+    get token() {
+        return this.dispatcher.token;
+    }
+
+    setToken(token: string): void {
+        this.dispatcher.setToken(token);
+    }
+
+    async getNewToken(): Promise<void> {
+        await this.dispatcher.getNewToken();
     }
 
     artists: IArtistEndpoints = {
