@@ -4,17 +4,17 @@ export function RequestConfig(token: string, method: AcceptedMethods, body?: Bod
     if (body) {
         return {
             method: method,
-            headers: new Headers({
+            headers: {
                 "Authorization": "Bearer " + token,
-            }),
+            },
             body: body
         }
     } else
         return {
         method: method,
-            headers: new Headers({
+            headers: {
                 "Authorization": "Bearer " + token,
                 "Content-Type": "application/json"
-            })
+            }
     }
 }
