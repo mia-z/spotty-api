@@ -28,7 +28,7 @@ jobs:
         cmd: install --immutable
     - uses: Borales/actions-yarn@v3
       with:
-        cmd: test
+        cmd: test --coverage
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v1
       with:
