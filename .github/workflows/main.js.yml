@@ -31,9 +31,9 @@ jobs:
         cmd: test
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v1
-        with:
-          # Upload entire repository
-          path: "./docs/coverage"
+      with:
+        # Upload entire repository
+        path: "./docs/coverage"
     - name: Deploy to GitHub Pages
       id: deployment
       uses: actions/deploy-pages@v1
