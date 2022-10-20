@@ -37,14 +37,14 @@ jobs:
         cmd: test --coverage
 
     - name: Setup Pages
-      uses: actions/configure-pages@v2
+      uses: actions/configure-pages@v2.1.1
 
     - name: Upload artifact
-      uses: actions/upload-pages-artifact@v1
+      uses: actions/upload-pages-artifact@v1.0.4
       with:
         path: "docs/coverage"
 
     - name: Deploy to GitHub Pages
       id: deployment
-      uses: actions/deploy-pages@v1.0.4
+      uses: actions/deploy-pages@v1.2.2
     
