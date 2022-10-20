@@ -3,6 +3,7 @@
 ![](https://img.shields.io/github/package-json/v/mia-z/spotty-api)
 ![](https://img.shields.io/github/commit-activity/w/mia-z/spotty-api)
 ![](https://img.shields.io/github/v/release/mia-z/spotty-api)
+
 ---
 
 # <p align="center">Spotty-API</p>
@@ -13,13 +14,13 @@
 
 More information on the endpoints used can be found [here](/https://developer.spotify.com/documentation/web-api/reference/#/) on Spotify's developer portal</p>
 
-
 ---
+
 ## <p align="center"> **Note** </p>
 <p align="center">The project is still under heavy construction. So far the only thing that's been implemented is a client which handles the security token and basic calls to the general endspoints.</p>
 
-
 ---
+
 ## <p align="center"> Features/Roadmap </p>
 
 - [x] Client class

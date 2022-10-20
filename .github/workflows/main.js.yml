@@ -6,14 +6,43 @@ on:
   pull_request:
     branches: [ "main" ]
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
 jobs:
   test:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
     - uses: Borales/actions-yarn@v3
       with:
-        cmd: install
+        cmd: install --immutable
     - uses: Borales/actions-yarn@v3
       with:
         cmd: test
+    - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          # Upload entire repository
+          path: "./docs/coverage"
+    - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
+    # - name: Publish test coverage report
+    #   uses: EndBug/add-and-commit@v4
+    #   with:
+    #     add: docs
+    #     force: true
+    #     message: Add generated docs
+    #   env:
+    #     GITHUB_TOKEN: $
+    
