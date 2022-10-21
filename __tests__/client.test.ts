@@ -1,15 +1,30 @@
-import { describe, expect, it, beforeEach, vi } from "vitest";
+import { describe, expect, it, beforeEach, vi, Mock } from "vitest";
 import { RequestConfig } from "../src/RequestConfig"; 
 import SpotifyClient from "../src/Client";
+import { RequestDispatcher } from "../src/RequestDispatcher";
+import { camelizeKeys } from "humps";
 
 describe("Client", () => {
-    beforeEach(() => {
+    const prepareNewTokenFetchMock = () => {
         global.fetch = vi.fn(() => 
             Promise.resolve({
                 status: 200,
                 json: () => Promise.resolve({ access_token: "updated_token" }),
             })
-        ) as jest.Mock;
+        ) as Mock;
+    }
+
+    const prepareDispatchFetchMock = (status: number) => {
+        global.fetch = vi.fn(() => 
+            Promise.resolve({
+                status: status,
+                json: () => Promise.resolve({ key: "value" }),
+            })
+        ) as Mock;
+    }
+
+    beforeEach(() => {
+        vi.resetAllMocks();
     });
 
     it("will successfully be instantiated when given a token", () => {
@@ -33,6 +48,7 @@ describe("Client", () => {
     });
 
     it("will fetch and apply a new token", async () => {
+        prepareNewTokenFetchMock();
         const client = new SpotifyClient("test_token", "refresh_token", "mock_endpoint");
         expect(client.token).toEqual("test_token");
         await client.getNewToken();
@@ -40,6 +56,8 @@ describe("Client", () => {
     });
 
     it("will throw if trying to get a new token if a refresh token wasnt given", () => {
+        prepareNewTokenFetchMock();
+
         const client = new SpotifyClient("test_token");
         expect(async () => {
             await client.getNewToken();
@@ -80,5 +98,56 @@ describe("Client", () => {
         const body = JSON.stringify({ key: "value" });
         const config = RequestConfig("new_token", "PUT", body);
         expect(config.body).toEqual(body);
+    });
+
+    it("will call 'camelizeKeys' during dispatch execution of PUT/POST requests without a body", async () => {
+        prepareDispatchFetchMock(200);
+        vi.mock("humps", () => {
+            return {
+                default: { default: vi.fn() },
+                camelizeKeys: vi.fn()
+            }
+        });
+        const dispatcher = new RequestDispatcher("new_token");
+        await dispatcher.dispatch<string>("POST", "endpoint");
+
+        expect(camelizeKeys).toBeCalled();
+    });
+
+    it("will call 'camelizeKeys' during dispatch execution of PUT/POST requests with a body", async () => {
+        prepareDispatchFetchMock(200);
+        vi.mock("humps", () => {
+            return {
+                default: { default: vi.fn() },
+                camelizeKeys: vi.fn()
+            }
+        });
+        const dispatcher = new RequestDispatcher("new_token");
+        await dispatcher.dispatch<string>("POST", "endpoint", { key: "value" });
+
+        expect(camelizeKeys).toBeCalled();
+    });
+
+    it("will call 'camelizeKeys' during dispatch execution of DELETE/GET requests", async () => {
+        prepareDispatchFetchMock(200);
+        vi.mock("humps", () => {
+            return {
+                default: { default: vi.fn() },
+                camelizeKeys: vi.fn()
+            }
+        });
+        const dispatcher = new RequestDispatcher("new_token");
+        await dispatcher.dispatch<string>("GET", "endpoint");
+
+        expect(camelizeKeys).toBeCalled();
+    });
+
+    it("will return an error object if the response status is 500", () => {
+        prepareDispatchFetchMock(500);
+        const dispatcher = new RequestDispatcher("new_token");
+
+        expect(async () => {
+            await dispatcher.dispatch<string>("GET", "endpoint");
+        }).rejects.toThrow();
     });
 });
