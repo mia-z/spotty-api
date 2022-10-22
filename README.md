@@ -10,7 +10,7 @@
 
 <p align="center">Simple wrapper around calls to the Spotify REST API, using the fetch API under the hood.</p>
 
-<p align="center">More information on the endpoints used can be found [here](/https://developer.spotify.com/documentation/web-api/reference/#/) on Spotify's developer portal</p>
+<div markdown="1" align="center">More information on the endpoints used can be found [here](/https://developer.spotify.com/documentation/web-api/reference/#/) on Spotify's developer portal</div>
 
 ---
 
