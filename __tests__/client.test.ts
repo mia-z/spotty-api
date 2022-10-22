@@ -8,7 +8,7 @@ describe("Client", () => {
         global.fetch = vi.fn(() => 
             Promise.resolve({
                 status: 200,
-                json: () => Promise.resolve([{ access_token: "updated_token" }]),
+                json: () => Promise.resolve({ access_token: "updated_token" }),
             })
         ) as Mock;
     }
@@ -17,7 +17,7 @@ describe("Client", () => {
         global.fetch = vi.fn(() => 
             Promise.resolve({
                 status: status,
-                json: () => Promise.resolve([{ key_name: "value" }]),
+                json: () => Promise.resolve({ key_name: "value" }),
             })
         ) as Mock;
     }
