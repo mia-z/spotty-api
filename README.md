@@ -8,18 +8,18 @@
 
 ## <p align="center">Spotify REST API written in Typescript</p>
 
-<p align="center">Simple wrapper around calls to the Spotify REST API, using the fetch API under the hood.</p>
+<p align="center">Simple wrapper around calls to the Spotify REST API, using the fetch API under the hood.
 
-<div markdown="1" align="center">More information on the endpoints used can be found [here](/https://developer.spotify.com/documentation/web-api/reference/#/) on Spotify's developer portal</div>
-
----
-
-## <p align="center"> **Note** </p>
-<p align="center">The project is still under heavy construction. So far the only thing that's been implemented is a client which handles the security token and basic calls to the general endspoints.</p>
+<p markdown="1" align="center"> More information on the endpoints used can be found <a href="https://developer.spotify.com/documentation/web-api/reference/#/">here</a> on Spotify's developer portal
 
 ---
 
-## <p align="center"> Features/Roadmap </p>
+## <p align="center"> **Note**
+<p align="center"> The project is still under heavy construction. So far the only thing that's been implemented is a client which handles the security token and basic calls to the general endspoints.
+
+---
+
+## <p align="center"> Features/Roadmap
 
 - [x] Client class
 - [x] Artists endpoints
