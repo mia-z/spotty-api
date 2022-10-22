@@ -1,6 +1,6 @@
 import { ErrorResponse, AcceptedMethods } from "index";
 import { RequestConfig } from "./RequestConfig"; 
-import { camelizeKeys } from "humps";
+import camelcaseKeys from "camelcase-keys";
 
 export class RequestDispatcher {
     token: string;
@@ -44,12 +44,14 @@ export class RequestDispatcher {
                     if (body !== undefined) {
                         const reqConfig = RequestConfig(this.token, method, JSON.stringify(body))
                         const res = await fetch(`https://api.spotify.com/v1${uri}`, reqConfig);
-                        const parsed = camelizeKeys(await res.json()) as T;
+                        const json = await res.json();
+                        const parsed = camelcaseKeys(json, { deep: true }) as T;
                         return parsed;
                     } else {
                         const reqConfig = RequestConfig(this.token, method);
                         const res = await fetch(`https://api.spotify.com/v1${uri}`, reqConfig);
-                        const parsed = camelizeKeys(await res.json()) as T;
+                        const json = await res.json();
+                        const parsed = camelcaseKeys(json, { deep: true }) as T;
                         return parsed;
                     }
                 }
@@ -57,7 +59,8 @@ export class RequestDispatcher {
                 case "DELETE": {
                     const reqConfig = RequestConfig(this.token, method);
                     const res = await fetch(`https://api.spotify.com/v1${uri}`, reqConfig);
-                    const parsed = camelizeKeys(await res.json()) as T;
+                    const json = await res.json();
+                    const parsed = camelcaseKeys(json, { deep: true }) as T;
                     return parsed;
                 }
             }
