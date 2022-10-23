@@ -1,6 +1,8 @@
-![workflow](https://github.com/mia-z/spotty-api/actions/workflows/main.js.yml/badge.svg)
-![](https://img.shields.io/github/package-json/v/mia-z/spotty-api)
-![](https://img.shields.io/github/commit-activity/w/mia-z/spotty-api)
+<p align="center">
+<img src="https://github.com/mia-z/spotty-api/actions/workflows/main.js.yml/badge.svg" />
+<img src=https://img.shields.io/github/package-json/v/mia-z/spotty-api />
+<img src=https://img.shields.io/github/commit-activity/w/mia-z/spotty-api />
+<img src="https://img.shields.io/codecov/c/github/mia-z/spotty-api" />
 
 ---
 
