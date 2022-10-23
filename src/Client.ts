@@ -91,7 +91,10 @@ export class SpotifyClient {
         removeAlbumsForUser: async (ids: string[]): SpotifyResponse<DeleteResponse> => {
             return await this.dispatchRequest("DELETE", "/me/albums?ids=" + ids.join(","));
         },
-        albumIsSaved: async (ids: string[]): SpotifyResponse<CheckResponse> => {
+        albumIsSaved: async (id: string): SpotifyResponse<CheckResponse> => {
+            return await this.dispatchRequest("GET", "/me/albums/contains?ids=" + id);
+        },
+        albumsAreSaved: async (ids: string[]): SpotifyResponse<CheckResponse> => {
             return await this.dispatchRequest("GET", "/me/albums/contains?ids=" + ids.join(","));
         },
         getNewReleases: async (): SpotifyResponse<ResultSet<Album>> => {

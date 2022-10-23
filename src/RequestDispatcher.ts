@@ -34,8 +34,8 @@ export class RequestDispatcher {
         }
     }
 
-    async dispatch<T>(method: AcceptedMethods, uri: string): Promise<T | ErrorResponse>;
-    async dispatch<T>(method: AcceptedMethods, uri: string, body: any): Promise<T | ErrorResponse>;
+    // async dispatch<T>(method: AcceptedMethods, uri: string): Promise<T | ErrorResponse>;
+    // async dispatch<T>(method: AcceptedMethods, uri: string, body: any): Promise<T | ErrorResponse>;
     async dispatch<T>(method: AcceptedMethods, uri: string, body?: any): Promise<T | ErrorResponse> {
         try {
             switch (method) {

@@ -43,7 +43,8 @@ export interface IAlbumEndpoints {
     saveAlbumsForUser(ids: Array<string>): SpotifyResponse<SaveResponse>;
     removeAlbumForUser(id: string): SpotifyResponse<DeleteResponse>;
     removeAlbumsForUser(ids: Array<string>): SpotifyResponse<DeleteResponse>;
-    albumIsSaved(ids: Array<string>): SpotifyResponse<CheckResponse>;
+    albumIsSaved(ids: string): SpotifyResponse<CheckResponse>;
+    albumsAreSaved(ids: Array<string>): SpotifyResponse<CheckResponse>;
     getNewReleases(): SpotifyResponse<ResultSet<Album>>;
 }
 

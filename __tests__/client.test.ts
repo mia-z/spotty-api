@@ -1,4 +1,4 @@
-import { describe, expect, it, beforeEach, vi, Mock } from "vitest";
+import { describe, expect, it, beforeEach, afterEach, vi, Mock } from "vitest";
 import { RequestConfig } from "../src/RequestConfig"; 
 import SpotifyClient from "../src/Client";
 import { RequestDispatcher } from "../src/RequestDispatcher";
@@ -13,33 +13,28 @@ describe("Client", () => {
         ) as Mock;
     }
 
-    const prepareDispatchFetchMock = (status: number) => {
-        global.fetch = vi.fn(() => 
-            Promise.resolve({
-                status: status,
-                json: () => Promise.resolve({ key_name: "value" }),
-            })
-        ) as Mock;
-    }
+    let client: SpotifyClient;
 
     beforeEach(() => {
+        client = new SpotifyClient("test_token");
+    });
+
+    afterEach(() => {
         vi.resetAllMocks();
     });
 
     it("will successfully be instantiated when given a token", () => {
-        const client = new SpotifyClient("test_token");
         expect(client.token).not.toBeNull();
         expect(client.token).toEqual("test_token");
     });
 
     it("will throw if a token is not given in the constructor", () => {
         expect(() => {
-            const client = new SpotifyClient("");
+            new SpotifyClient("");
         }).toThrow("No token given to client");
     });
 
     it("will update the token if given a new one", () => {
-        const client = new SpotifyClient("test_token");
         expect(client.token).toEqual("test_token");
 
         client.setToken("new_token");
@@ -48,16 +43,15 @@ describe("Client", () => {
 
     it("will fetch and apply a new token", async () => {
         prepareNewTokenFetchMock();
-        const client = new SpotifyClient("test_token", "refresh_token", "mock_endpoint");
-        expect(client.token).toEqual("test_token");
-        await client.getNewToken();
-        expect(client.token).toEqual("updated_token");
+        const innerClient = new SpotifyClient("test_token", "refresh_token", "mock_endpoint");
+        expect(innerClient.token).toEqual("test_token");
+        await innerClient.getNewToken();
+        expect(innerClient.token).toEqual("updated_token");
     });
 
     it("will throw if trying to get a new token if a refresh token wasnt given", () => {
         prepareNewTokenFetchMock();
 
-        const client = new SpotifyClient("test_token");
         expect(async () => {
             await client.getNewToken();
         }).rejects.toThrow("No refresh token exist");

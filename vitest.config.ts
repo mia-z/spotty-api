@@ -4,6 +4,6 @@ export default defineConfig({
     test: {
         coverage: {
             reportsDirectory: "./docs/coverage"
-        }
-    },
+        },
+    }
 })
