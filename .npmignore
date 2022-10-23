@@ -3,3 +3,7 @@
 node_modules
 .yarn
 .yarnrc.yml
+__tests__
+.github
+docs
+vitest.config.ts
