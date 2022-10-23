@@ -49,4 +49,7 @@ jobs:
     - name: Deploy to GitHub Pages
       id: deployment
       uses: actions/deploy-pages@v1.2.2
+
+    - name: Publish coverage to Codecov
+      uses: codecov/codecov-action@v3
     
