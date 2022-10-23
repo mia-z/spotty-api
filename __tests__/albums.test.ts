@@ -30,11 +30,8 @@ describe("Album", () => {
 
     it("will fetch an album from the correct endpoint", async () => {
         prepareFetchMock();
-        const clientSpy = vi.spyOn(client.albums, "getAlbum");
         await client.albums.getAlbum("albumId");
 
-        expect(clientSpy).toHaveBeenCalledOnce();
-        expect(clientSpy).toBeCalledWith("albumId");
         expect(dispatchSpy).toHaveBeenCalledOnce();
         expect(dispatchSpy).toBeCalledWith("GET", "/albums/albumId");
     });

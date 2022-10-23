@@ -92,8 +92,10 @@ export interface IPlaylistEndpoints {
     getPlaylist(id: string): SpotifyResponse<Playlist>;
     updatePlaylistDetails(id: string, UpdatedPlaylistDetails: Pick<Playlist, "name" | "public" | "collaborative" | "description">): SpotifyResponse<Playlist>;
     getPlaylistTracks(id: string): SpotifyResponse<ResultSet<Track>>;
-    addTrackToPlaylist(id: string, Trackids: Array<string>): SpotifyResponse<SnapshotResponse>;
-    removeTrackFromPlaylist(id: string, Trackids: { "tracks": Array<Pick<Track, "uri">> }): SpotifyResponse<SnapshotResponse>;
+    addTrackToPlaylist(id: string, TrackId: string): SpotifyResponse<SnapshotResponse>;
+    addTracksToPlaylist(id: string, TrackIds: Array<string>): SpotifyResponse<SnapshotResponse>;
+    removeTrackFromPlaylist(id: string, TrackId: string): SpotifyResponse<SnapshotResponse>;
+    removeTracksFromPlaylist(id: string, TrackIds: Array<string>): SpotifyResponse<SnapshotResponse>;
     getCurrentUserPlaylists(): SpotifyResponse<ResultSet<Playlist>>;
     getUsersPlaylists(id: string): SpotifyResponse<ResultSet<Playlist>>;
     createPlaylist(id: string, NewPlaylist: Pick<Playlist, "name" | "public" | "collaborative" | "description">): SpotifyResponse<Playlist>;
@@ -294,7 +296,7 @@ export type Playlist = {
     owner?: Omit<ResultSet<User>, "Items"> & {
         displayName: string
     },
-    public?: string,
+    public?: boolean,
     snapshotId?: string,
     tracks?: ResultSet<Track>,
     type?: "playlist",

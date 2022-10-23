@@ -142,11 +142,19 @@ export class SpotifyClient {
         getPlaylistTracks: async (id: string): SpotifyResponse<ResultSet<Track>> => {
             return await this.dispatchRequest("GET", "/playlists/" + id + "/tracks");
         },
-        addTrackToPlaylist: async (id: string, trackIds: string[]): SpotifyResponse<SnapshotResponse> => {
-            return await this.dispatchRequest("POST", "/playlists/" + id + "/tracks?ids=" + trackIds.join(","));
+        addTrackToPlaylist: async (id: string, trackId: string): SpotifyResponse<SnapshotResponse> => {
+            return await this.dispatchRequest("POST", "/playlists/" + id + "/tracks?uris=" + trackId);
         },
-        removeTrackFromPlaylist: async (id: string, trackIds: { tracks: Pick<Track, "uri">[]; }): SpotifyResponse<SnapshotResponse> => {
-            return await this.dispatchRequest("DELETE", "/playlists/" + id + "/tracks", trackIds);
+        addTracksToPlaylist: async (id: string, trackIds: string[]): SpotifyResponse<SnapshotResponse> => {
+            return await this.dispatchRequest("POST", "/playlists/" + id + "/tracks?uris=" + trackIds.join(","));
+        },
+        removeTrackFromPlaylist: async (id: string, trackId: string): SpotifyResponse<SnapshotResponse> => {
+            let trackIdSet: { tracks: Pick<Track, "uri">[]; } = { tracks: [ { uri: trackId } ] }
+            return await this.dispatchRequest("DELETE", "/playlists/" + id + "/tracks", trackIdSet);
+        },
+        removeTracksFromPlaylist: async (id: string, trackIds: Array<string>): SpotifyResponse<SnapshotResponse> => {
+            let trackIdSet: { tracks: Pick<Track, "uri">[]; } = { tracks: trackIds.map(item => { return { uri: item } }) };
+            return await this.dispatchRequest("DELETE", "/playlists/" + id + "/tracks", trackIdSet);
         },
         getCurrentUserPlaylists: async (): SpotifyResponse<ResultSet<Playlist>> => {
             return await this.dispatchRequest("GET", "/me/playlists");
