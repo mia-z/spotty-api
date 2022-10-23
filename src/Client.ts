@@ -112,13 +112,22 @@ export class SpotifyClient {
         getMySavedTracks: async (): SpotifyResponse<ResultSet<Track>> => {
             return await this.dispatchRequest("GET", "/me/tracks");
         },
-        saveTrackForUser: async (ids: string[]): SpotifyResponse<SaveResponse> => {
+        saveTrackForUser: async (id: string): SpotifyResponse<SaveResponse> => {
+            return await this.dispatchRequest("PUT", "/me/tracks?ids=" + id);
+        },
+        saveTracksForUser: async (ids: string[]): SpotifyResponse<SaveResponse> => {
             return await this.dispatchRequest("PUT", "/me/tracks?ids=" + ids.join(","));
+        },
+        removeTrackForUser: async (id: string): SpotifyResponse<DeleteResponse> => {
+            return await this.dispatchRequest("DELETE", "/me/tracks?ids=" + id);
         },
         removeTracksForUser: async (ids: string[]): SpotifyResponse<DeleteResponse> => {
             return await this.dispatchRequest("DELETE", "/me/tracks?ids=" + ids.join(","));
         },
-        trackIsSaved: async (ids: string[]): SpotifyResponse<CheckResponse> => {
+        trackIsSaved: async (id: string): SpotifyResponse<CheckResponse> => {
+            return await this.dispatchRequest("GET", "/me/tracks/contains?ids=" + id);
+        },
+        tracksAreSaved: async (ids: string[]): SpotifyResponse<CheckResponse> => {
             return await this.dispatchRequest("GET", "/me/tracks/contains?ids=" + ids.join(","));
         },
     }
@@ -181,22 +190,40 @@ export class SpotifyClient {
         getCurrentUserFollowedArtists: async (): SpotifyResponse<ResultSet<Artist>> => {
             return await this.dispatchRequest("GET", "/me/following");
         },
-        followArtist: async (ids: string[]): SpotifyResponse<FollowResponse> => {
+        followArtist: async (id: string): SpotifyResponse<FollowResponse> => {
+            return await this.dispatchRequest("PUT", "/me/following?ids=" + id + "&type=artist");
+        },
+        followArtists: async (ids: string[]): SpotifyResponse<FollowResponse> => {
             return await this.dispatchRequest("PUT", "/me/following?ids=" + ids.join(",") + "&type=artist");
         },
-        unfollowArtist: async (ids: string[]): SpotifyResponse<FollowResponse> => {
+        unfollowArtist: async (id: string): SpotifyResponse<FollowResponse> => {
+            return await this.dispatchRequest("DELETE", "/me/following?ids=" + id + "&type=artist");
+        },
+        unfollowArtists: async (ids: string[]): SpotifyResponse<FollowResponse> => {
             return await this.dispatchRequest("DELETE", "/me/following?ids=" + ids.join(",") + "&type=artist");
         },
-        followUser: async (ids: string[]): SpotifyResponse<FollowResponse> => {
+        followUser: async (id: string): SpotifyResponse<FollowResponse> => {
+            return await this.dispatchRequest("PUT", "/me/following?ids=" + id + "&type=user");
+        },
+        followUsers: async (ids: string[]): SpotifyResponse<FollowResponse> => {
             return await this.dispatchRequest("PUT", "/me/following?ids=" + ids.join(",") + "&type=user");
         },
-        unfollowUser: async (ids: string[]): SpotifyResponse<FollowResponse> => {
+        unfollowUser: async (id: string): SpotifyResponse<FollowResponse> => {
+            return await this.dispatchRequest("DELETE", "/me/following?ids=" + id + "&type=user");
+        },
+        unfollowUsers: async (ids: string[]): SpotifyResponse<FollowResponse> => {
             return await this.dispatchRequest("DELETE", "/me/following?ids=" + ids.join(",") + "&type=user");
         },
-        checkIfCurrentUserFollowsArtist: async (ids: string[]): SpotifyResponse<CheckResponse> => {
+        checkIfCurrentUserFollowsArtist: async (id: string): SpotifyResponse<CheckResponse> => {
+            return await this.dispatchRequest("GET", "/me/following/contains?ids=" + id + "&type=artist");
+        },
+        checkIfCurrentUserFollowsArtists: async (ids: string[]): SpotifyResponse<CheckResponse> => {
             return await this.dispatchRequest("GET", "/me/following/contains?ids=" + ids.join(",") + "&type=artist");
         },
-        checkIfCurrentUserFollowsUser: async (ids: string[]): SpotifyResponse<CheckResponse> => {
+        checkIfCurrentUserFollowsUser: async (id: string): SpotifyResponse<CheckResponse> => {
+            return await this.dispatchRequest("GET", "/me/following/contains?ids=" + id + "&type=user");
+        },
+        checkIfCurrentUserFollowsUsers: async (ids: string[]): SpotifyResponse<CheckResponse> => {
             return await this.dispatchRequest("GET", "/me/following/contains?ids=" + ids.join(",") + "&type=user");
         }
     }

@@ -60,9 +60,12 @@ export interface ITrackEndpoints {
     getTrack(id: string): SpotifyResponse<Track>;
     getTracks(ids: Array<string>): SpotifyResponse<Array<Track>>;
     getMySavedTracks(): SpotifyResponse<ResultSet<Track>>;
-    saveTrackForUser(id: Array<string>): SpotifyResponse<SaveResponse>;
+    saveTrackForUser(id: string): SpotifyResponse<SaveResponse>;
+    saveTracksForUser(id: Array<string>): SpotifyResponse<SaveResponse>;
+    removeTrackForUser(ids: string): SpotifyResponse<DeleteResponse>;
     removeTracksForUser(ids: Array<string>): SpotifyResponse<DeleteResponse>;
-    trackIsSaved(ids: Array<string>): SpotifyResponse<CheckResponse>;
+    trackIsSaved(ids: string): SpotifyResponse<CheckResponse>;
+    tracksAreSaved(ids: Array<string>): SpotifyResponse<CheckResponse>;
 }
 
 export interface IUserEndpoints {
@@ -71,12 +74,18 @@ export interface IUserEndpoints {
     getCurrentUsersTopAlbums(): SpotifyResponse<ResultSet<Album>>;
     getUserProfile(id: string): SpotifyResponse<User>;
     getCurrentUserFollowedArtists(): SpotifyResponse<ResultSet<Artist>>;
-    followArtist(ids: Array<string>): SpotifyResponse<FollowResponse>;
-    unfollowArtist(ids: Array<string>): SpotifyResponse<FollowResponse>;
-    followUser(ids: Array<string>): SpotifyResponse<FollowResponse>;
-    unfollowUser(ids: Array<string>): SpotifyResponse<FollowResponse>;
-    checkIfCurrentUserFollowsArtist(ids: Array<string>):SpotifyResponse<CheckResponse>;
-    checkIfCurrentUserFollowsUser(ids: Array<string>):SpotifyResponse<CheckResponse>;
+    followArtist(ids: string): SpotifyResponse<FollowResponse>;
+    followArtists(ids: Array<string>): SpotifyResponse<FollowResponse>;
+    unfollowArtist(ids: string): SpotifyResponse<FollowResponse>;
+    unfollowArtists(ids: Array<string>): SpotifyResponse<FollowResponse>;
+    followUser(ids: string): SpotifyResponse<FollowResponse>;
+    followUsers(ids: Array<string>): SpotifyResponse<FollowResponse>;
+    unfollowUser(ids: string): SpotifyResponse<FollowResponse>;
+    unfollowUsers(ids: Array<string>): SpotifyResponse<FollowResponse>;
+    checkIfCurrentUserFollowsArtist(ids: string):SpotifyResponse<CheckResponse>;
+    checkIfCurrentUserFollowsArtists(ids: Array<string>):SpotifyResponse<CheckResponse>;
+    checkIfCurrentUserFollowsUser(ids: string):SpotifyResponse<CheckResponse>;
+    checkIfCurrentUserFollowsUsers(ids: Array<string>):SpotifyResponse<CheckResponse>;
 }
 
 export interface IPlaylistEndpoints {
