@@ -30,8 +30,8 @@ describe("Album", () => {
 
     it("will fetch an album from the correct endpoint", async () => {
         prepareFetchMock();
-        await client.albums.getAlbum("albumId");
 
+        expect(client.albums.getAlbum("albumId")).resolves;
         expect(dispatchSpy).toHaveBeenCalledOnce();
         expect(dispatchSpy).toBeCalledWith("GET", "/albums/albumId");
     });
