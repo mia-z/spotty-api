@@ -1,7 +1,8 @@
+import checkCamelcase from "check-camelcase";
 import { Album } from "index";
 import SpotifyClient from "src/Client";
 import { describe, expect, it, beforeEach, vi, Mock, afterEach, SpyInstance } from "vitest";
-import { albums } from "./fixtures";
+import { album, albums, album_tracks, asResponseObject } from "./fixtures";
 
 describe("Album", () => {
     const prepareFetchMockWithFixture = (fixture: string) => {
@@ -30,10 +31,29 @@ describe("Album", () => {
 
     it("will fetch an album from the correct endpoint", async () => {
         prepareFetchMock();
+        let res = await client.albums.getAlbum("albumId");
 
-        expect(client.albums.getAlbum("albumId")).resolves;
         expect(dispatchSpy).toHaveBeenCalledOnce();
         expect(dispatchSpy).toBeCalledWith("GET", "/albums/albumId");
+    });
+
+    it("will parse the keys of a fetched album to camel case", async () => {
+        prepareFetchMockWithFixture(album);
+
+        let res = await client.albums.getAlbum("albumId");
+
+        for (let key of Object.keys(res)) {
+            expect(key.match(/([-])/)).toBeFalsy();
+        }
+    });
+
+    it("will parse the response object", async () => {
+        prepareFetchMockWithFixture(album);
+        let matchResponse = asResponseObject(album);
+
+        let res = await client.albums.getAlbum("albumId");
+
+        expect(res).toMatchObject(matchResponse);
     });
 
     it("will fetch multiple albums from the correct endpoint", async () => {
@@ -45,6 +65,24 @@ describe("Album", () => {
         expect(dispatchSpy).toBeCalledWith("GET", "/albums?ids=albumId1,albumId2");
     });
 
+    it("will parse the keys of multiple fetched albums to camel case", async () => {
+        prepareFetchMockWithFixture(albums);
+
+        let res = await client.albums.getAlbums(["albumId1", "albumId2"]);
+
+        for (let key of Object.keys(res)) {
+            expect(key.match(/([-])/)).toBeFalsy();
+        }
+    });
+
+    it("will parse the multiple albums response object", async () => {
+        prepareFetchMockWithFixture(albums);
+        let matchResponse = asResponseObject(albums);
+
+        let res = await client.albums.getAlbums(["albumId1", "albumId2"]);
+
+        expect(res).toMatchObject(matchResponse);
+    });
 
     it("will fetch album tracks from the correct endpoint", async () => {
         prepareFetchMock();
@@ -53,6 +91,25 @@ describe("Album", () => {
 
         expect(dispatchSpy).toHaveBeenCalledOnce();
         expect(dispatchSpy).toBeCalledWith("GET", "/albums/albumId/tracks");
+    });
+
+    it("will parse the keys of fetched tracks to camel case", async () => {
+        prepareFetchMockWithFixture(album_tracks);
+
+        let res = await client.albums.getAlbumTracks("albumId");
+
+        for (let key of Object.keys(res)) {
+            expect(key.match(/([-])/)).toBeFalsy();
+        }
+    });
+
+    it("will parse the tracks response object", async () => {
+        prepareFetchMockWithFixture(album_tracks);
+        let matchResponse = asResponseObject(album_tracks);
+
+        let res = await client.albums.getAlbumTracks("albumId");
+
+        expect(res).toMatchObject(matchResponse);
     });
 
     it("will fetch users saved albums from the correct endpoint", async () => {

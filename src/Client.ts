@@ -175,6 +175,7 @@ export class SpotifyClient {
             return await this.dispatchRequest("GET", "/playlists/" + id + "/images");
         },
         addPlaylistCoverImage: async (id: string, CustomImage: string): SpotifyResponse<string> => {
+            //TODO: implement this
             throw new Error("need logged in user.");
         },
         checkIfUsersFollowPlaylist: async (id: string, ids: string[]): SpotifyResponse<CheckResponse> => {

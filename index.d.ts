@@ -220,16 +220,16 @@ export type Album = {
 }
 
 export type Artist = {
-   externalUrls?: ExternalUrl,
-   followers?: Followers,
-   genres?: Array<string>,
-   href?: string,
-   id: string,
-   images?: Array<Image>,
-   name?: string,
-   popularity?: number,
-   type?: "artist",
-   uri?: string
+    externalUrls?: ExternalUrl,
+    followers?: Followers,
+    genres?: Array<string>,
+    href?: string,
+    id: string,
+    images?: Array<Image>,
+    name?: string,
+    popularity?: number,
+    type?: "artist",
+    uri?: string
 }
 
 export type Track = {

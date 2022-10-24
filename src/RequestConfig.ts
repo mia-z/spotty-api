@@ -6,6 +6,7 @@ export function RequestConfig(token: string, method: AcceptedMethods, body?: Bod
             method: method,
             headers: {
                 "Authorization": "Bearer " + token,
+                "Content-Type": "application/json"
             },
             body: body
         }

@@ -1,9 +1,14 @@
 import { readFileSync } from "fs";
 import { join } from "path";
+import camelcaseKeys from "camelcase-keys";
 
 const loadFixtureData = (filename: string): string => {
 	const path = join(__dirname, "./fixtures/", filename + ".json");
 	return readFileSync(path, "utf-8");
+}
+
+export const asResponseObject = (json: string) => {
+	return camelcaseKeys(JSON.parse(json), { deep: true });
 }
 
 export const album = loadFixtureData("album");
