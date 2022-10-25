@@ -8,9 +8,29 @@
     "moduleResolution": "Node",
     "esModuleInterop": true,
     "lib": ["DOM", "ES2015"],
-    "baseUrl": ".",
+    "baseUrl": "./",
     "paths": {
-      "spotify": ["."]
+      "spotify": ["./"]
     }
   }
 }
+
+// {
+//   "compilerOptions": {
+//     "module": "ESNext",
+//     "allowJs": true,
+//     "checkJs": true,
+//     "strict": true,
+//     "target": "ESNext",
+//     "moduleResolution": "Node",
+//     "esModuleInterop": true,
+//     "lib": ["DOM", "ES2015"],
+//     "baseUrl": ".",
+//     "paths": {
+//       "spotify": ["."]
+//     },
+//     "outDir": "dist"
+//   },
+//   "include": ["index.js", "index.d.ts", "src/**/*"],
+//   "exclude": ["node_modules", "__tests__", "dist/**/*"]
+// }

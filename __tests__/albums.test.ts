@@ -1,8 +1,6 @@
-import checkCamelcase from "check-camelcase";
-import { Album } from "index";
 import SpotifyClient from "src/Client";
 import { describe, expect, it, beforeEach, vi, Mock, afterEach, SpyInstance } from "vitest";
-import { album, albums, album_tracks, asResponseObject } from "./fixtures";
+import { album, albums } from "./fixtures";
 
 describe("Album", () => {
     const prepareFetchMockWithFixture = (fixture: string) => {
@@ -16,7 +14,8 @@ describe("Album", () => {
 
     const prepareFetchMock = () => global.fetch = vi.fn() as Mock;
 
-    let client: SpotifyClient;
+    let client: SpotifyClient;    
+    let clientSpy: SpyInstance;
     let dispatchSpy: SpyInstance;
 
     beforeEach(() => {
@@ -30,156 +29,122 @@ describe("Album", () => {
     });
 
     it("will fetch an album from the correct endpoint", async () => {
-        prepareFetchMock();
+        prepareFetchMockWithFixture(album);
+        clientSpy = vi.spyOn(client.albums, "getAlbum");
+
         let res = await client.albums.getAlbum("albumId");
 
+        expect(clientSpy).toReturnWith(res);
         expect(dispatchSpy).toHaveBeenCalledOnce();
         expect(dispatchSpy).toBeCalledWith("GET", "/albums/albumId");
     });
 
-    it("will parse the keys of a fetched album to camel case", async () => {
-        prepareFetchMockWithFixture(album);
-
-        let res = await client.albums.getAlbum("albumId");
-
-        for (let key of Object.keys(res)) {
-            expect(key.match(/([-])/)).toBeFalsy();
-        }
-    });
-
-    it("will parse the response object", async () => {
-        prepareFetchMockWithFixture(album);
-        let matchResponse = asResponseObject(album);
-
-        let res = await client.albums.getAlbum("albumId");
-
-        expect(res).toMatchObject(matchResponse);
-    });
-
     it("will fetch multiple albums from the correct endpoint", async () => {
-        prepareFetchMock();
-        
-        await client.albums.getAlbums(["albumId1", "albumId2"]);
+        prepareFetchMockWithFixture(albums);
+        clientSpy = vi.spyOn(client.albums, "getAlbums");
 
+        let res = await client.albums.getAlbums(["albumId1", "albumId2"]);
+
+        expect(clientSpy).toReturnWith(res);
         expect(dispatchSpy).toHaveBeenCalledOnce();
         expect(dispatchSpy).toBeCalledWith("GET", "/albums?ids=albumId1,albumId2");
     });
 
-    it("will parse the keys of multiple fetched albums to camel case", async () => {
-        prepareFetchMockWithFixture(albums);
-
-        let res = await client.albums.getAlbums(["albumId1", "albumId2"]);
-
-        for (let key of Object.keys(res)) {
-            expect(key.match(/([-])/)).toBeFalsy();
-        }
-    });
-
-    it("will parse the multiple albums response object", async () => {
-        prepareFetchMockWithFixture(albums);
-        let matchResponse = asResponseObject(albums);
-
-        let res = await client.albums.getAlbums(["albumId1", "albumId2"]);
-
-        expect(res).toMatchObject(matchResponse);
-    });
-
     it("will fetch album tracks from the correct endpoint", async () => {
         prepareFetchMock();
-        
+        clientSpy = vi.spyOn(client.albums, "getAlbumTracks");
+
         await client.albums.getAlbumTracks("albumId");
 
+        expect(clientSpy).toHaveReturned();
         expect(dispatchSpy).toHaveBeenCalledOnce();
         expect(dispatchSpy).toBeCalledWith("GET", "/albums/albumId/tracks");
     });
 
-    it("will parse the keys of fetched tracks to camel case", async () => {
-        prepareFetchMockWithFixture(album_tracks);
-
-        let res = await client.albums.getAlbumTracks("albumId");
-
-        for (let key of Object.keys(res)) {
-            expect(key.match(/([-])/)).toBeFalsy();
-        }
-    });
-
-    it("will parse the tracks response object", async () => {
-        prepareFetchMockWithFixture(album_tracks);
-        let matchResponse = asResponseObject(album_tracks);
-
-        let res = await client.albums.getAlbumTracks("albumId");
-
-        expect(res).toMatchObject(matchResponse);
-    });
-
     it("will fetch users saved albums from the correct endpoint", async () => {
         prepareFetchMock();
-        
-        await client.albums.getMySavedAlbums();
+        clientSpy = vi.spyOn(client.albums, "getMySavedAlbums");
 
+        await client.albums.getMySavedAlbums();
+        
+        expect(clientSpy).toHaveReturned();
         expect(dispatchSpy).toHaveBeenCalledOnce();
         expect(dispatchSpy).toBeCalledWith("GET", "/me/albums");
     });
 
     it("will delete a saved album at the correct endpoint", async () => {
         prepareFetchMock();
-        
-        await client.albums.removeAlbumForUser("albumId");
+        clientSpy = vi.spyOn(client.albums, "removeAlbumForUser");
 
+        await client.albums.removeAlbumForUser("albumId");
+        
+        expect(clientSpy).toHaveReturned();
         expect(dispatchSpy).toHaveBeenCalledOnce();
         expect(dispatchSpy).toBeCalledWith("DELETE", "/me/albums?ids=albumId");
     });
 
     it("will delete multiple saved albums at the correct endpoint", async () => {
         prepareFetchMock();
-        
-        await client.albums.removeAlbumsForUser(["albumId1", "albumId2"]);
+        clientSpy = vi.spyOn(client.albums, "removeAlbumsForUser");
 
+        await client.albums.removeAlbumsForUser(["albumId1", "albumId2"]);
+        
+        expect(clientSpy).toHaveReturned();
         expect(dispatchSpy).toHaveBeenCalledOnce();
         expect(dispatchSpy).toBeCalledWith("DELETE", "/me/albums?ids=albumId1,albumId2");
     });
 
     it("will save an album at the correct endpoint", async () => {
         prepareFetchMock();
-        
-        await client.albums.saveAlbumForUser("albumId");
+        clientSpy = vi.spyOn(client.albums, "saveAlbumForUser");
 
+        await client.albums.saveAlbumForUser("albumId");
+        
+        expect(clientSpy).toHaveReturned();
         expect(dispatchSpy).toHaveBeenCalledOnce();
         expect(dispatchSpy).toBeCalledWith("PUT", "/me/albums?ids=albumId");
     });
 
     it("will save multiple albums at the correct endpoint", async () => {
         prepareFetchMock();
-        
-        await client.albums.saveAlbumsForUser(["albumId1", "albumId2"]);
+        clientSpy = vi.spyOn(client.albums, "saveAlbumsForUser");
 
+        await client.albums.saveAlbumsForUser(["albumId1", "albumId2"]);
+        
+        expect(clientSpy).toHaveReturned();
         expect(dispatchSpy).toHaveBeenCalledOnce();
         expect(dispatchSpy).toBeCalledWith("PUT", "/me/albums?ids=albumId1,albumId2");
     });
 
     it("will check if an album is saved for the current user at the correct endpoint", async () => {
         prepareFetchMock();
-        
-        await client.albums.albumIsSaved("albumId");
+        clientSpy = vi.spyOn(client.albums, "albumIsSaved");
 
+        await client.albums.albumIsSaved("albumId");
+        
+        expect(clientSpy).toHaveReturned();
         expect(dispatchSpy).toHaveBeenCalledOnce();
         expect(dispatchSpy).toBeCalledWith("GET", "/me/albums/contains?ids=albumId");
     });
 
     it("will check if multiple albums saved for the current user at the correct endpoint", async () => {
         prepareFetchMock();
-        
-        await client.albums.albumsAreSaved(["albumId1", "albumId2"]);
+        clientSpy = vi.spyOn(client.albums, "albumsAreSaved");
 
+        await client.albums.albumsAreSaved(["albumId1", "albumId2"]);
+        
+        expect(clientSpy).toHaveReturned();
         expect(dispatchSpy).toHaveBeenCalledOnce();
         expect(dispatchSpy).toBeCalledWith("GET", "/me/albums/contains?ids=albumId1,albumId2");
     });
 
     it("will fetch the current new album releases at the correct endpoint", async () => {
         prepareFetchMock();
-        
-        await client.albums.getNewReleases();
+        clientSpy = vi.spyOn(client.albums, "getNewReleases");
 
+        await client.albums.getNewReleases();
+        
+        expect(clientSpy).toHaveReturned();
         expect(dispatchSpy).toHaveBeenCalledOnce();
         expect(dispatchSpy).toBeCalledWith("GET", "/browse/new-releases");
     });
